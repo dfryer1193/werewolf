@@ -10,10 +10,12 @@ type GameEgg struct {
 }
 
 type Game struct {
-	Id          string
-	Players     map[string]model.Player // Discord username -> Player
-	Config      GameConfig
-	IsCompleted bool
+	Id           string
+	Players      map[string]model.Player // Discord username -> Player
+	Config       GameConfig
+	IsCompleted  bool
+	CurrentNight Night
+	CurrentDay   Day
 }
 
 type Day struct {
@@ -23,9 +25,11 @@ type Day struct {
 }
 
 type Night struct {
-	GameID  string
-	Id      string
-	Actions ActionSet
+	GameID          string
+	Id              string
+	PlayerTargetMap map[string]string
+	GuardedPlayers  []model.GuardState
+	Sabotages       []string
 }
 
 func NewGame(signups []model.DiscordUser, cfg GameConfig) *GameEgg {

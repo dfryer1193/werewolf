@@ -1,3 +1,6 @@
 package model
 
-type Player struct{}
+type Player struct {
+	Name string
+	Role Role
+}
