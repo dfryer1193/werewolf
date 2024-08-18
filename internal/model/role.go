@@ -14,6 +14,8 @@ Thinking out loud:
 	When resolving night actions, call game.scry(actor="B", target="A")
 */
 
+var RoleLUT map[string]*Role
+
 type Team string
 
 const (
@@ -156,6 +158,12 @@ var (
 	}
 	ROLE_WEREWOLF = Role{
 		Name:        WEREWOLF,
+		Variant:     NONE,
+		Team:        TEAM_WEREWOLF,
+		DisplayTeam: TEAM_WEREWOLF,
+	}
+	ROLE_ALPHA_WEREWOLF = Role{
+		Name:        WEREWOLF,
 		Variant:     ALPHA,
 		Team:        TEAM_WEREWOLF,
 		DisplayTeam: TEAM_WEREWOLF,
@@ -182,6 +190,34 @@ var (
 		DisplayTeam: TEAM_VILLAGER,
 	}
 )
+
+func init() {
+	RoleLUT = make(map[string]*Role)
+
+	RoleLUT["SEER"] = &ROLE_SEER
+	RoleLUT["CURSED_SEER"] = &ROLE_CURSED_SEER
+	RoleLUT["ANCIENT_SEER"] = &ROLE_ANCIENT_SEER
+	RoleLUT["GHOST"] = &ROLE_GHOST
+	RoleLUT["BODYGUARD"] = &ROLE_BODYGUARD
+	RoleLUT["CARRIAGE_DRIVER"] = &ROLE_CARRIAGE_DRIVER
+	RoleLUT["CURSED"] = &ROLE_CURSED
+	RoleLUT["CORONER"] = &ROLE_CORONER
+	RoleLUT["MASON"] = &ROLE_MASON
+	RoleLUT["LYCAN"] = &ROLE_LYCAN
+	RoleLUT["HUNTER"] = &ROLE_HUNTER
+	RoleLUT["WITCH"] = &ROLE_WITCH
+	RoleLUT["DISEASED"] = &ROLE_DISEASED
+	RoleLUT["VILLAGER"] = &ROLE_VILLAGER
+	RoleLUT["WEREWOLF"] = &ROLE_WEREWOLF
+	RoleLUT["ALPHA_WEREWOLF"] = &ROLE_ALPHA_WEREWOLF
+	RoleLUT["WEREWOLF_SEER"] = &ROLE_WEREWOLF_SEER
+	RoleLUT["MINION"] = &ROLE_MINION
+	RoleLUT["TANNER"] = &ROLE_TANNER
+}
+
+func RoleLookup(name string) *Role {
+	return RoleLUT[name]
+}
 
 func Scry(g *game.Game, actor *Player, targets ...string) string {
 	resolvedTarget := g.CurrentNight.PlayerTargetMap[targets[0]]
@@ -240,7 +276,7 @@ func AlphaConversion(g *game.Game, actor *Player, targets ...string) string {
 	target := targets[0]
 	targetPlayer := g.Players[target]
 
-	targetPlayer.Role = ROLE_WEREWOLF
+	targetPlayer.Role = &ROLE_WEREWOLF
 
 	return ""
 }
